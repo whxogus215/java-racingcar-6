@@ -2,8 +2,12 @@ package racingcar.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import racingcar.config.ErrorMessage;
 
 public class Parser {
+    private static final String COMMA = ",";
+    private static final String WHITE_SPACE = " ";
+
     public static List<String> getParsedNames(String input) {
         validateInputFormat(input);
         return Arrays.stream(input.split(",")).toList();
@@ -13,8 +17,8 @@ public class Parser {
         /**
          * 잘못된 입력 값 예시 : "abc,df," or "abc,df, "
          */
-        if (input.endsWith(",") || input.endsWith(" ")) {
-            throw new IllegalArgumentException("입력된 값 형식이 올바르지 않습니다.");
+        if (input.endsWith(COMMA) || input.endsWith(WHITE_SPACE)) {
+            throw new IllegalArgumentException(ErrorMessage.NOT_END_COMMA.getMessage());
         }
     }
 }
