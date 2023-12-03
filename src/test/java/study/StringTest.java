@@ -3,7 +3,10 @@ package study;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class StringTest {
 
@@ -13,7 +16,18 @@ public class StringTest {
         String[] result = input.split(",");
 
         assertThat(result).contains("2", "1");
+        // containsExactly는 배열의 순서까지 같은지 확인
         assertThat(result).containsExactly("1", "2");
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1,2,","1,2, "})
+    void split_메서드로_주어진_값을_구분_공백포함(String input) {
+        // limit을 음수로 줄 경우, 뒤에 오는 빈 문자열도 포함시킴
+        String[] result = input.split(",", -1);
+
+        assertThat(result).contains("2", "1");
+        assertThat(result.length).isEqualTo(3);
     }
 
     @Test
