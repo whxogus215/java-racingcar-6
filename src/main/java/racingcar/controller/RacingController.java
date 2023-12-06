@@ -5,17 +5,26 @@ import racingcar.config.ErrorMessage;
 import racingcar.config.OutputMessage;
 import racingcar.config.Regex;
 import racingcar.domain.RacingCarFactory;
+import racingcar.dto.Result;
 import racingcar.exception.ExceptionHandler;
+import racingcar.service.RacingService;
 import racingcar.utils.Parser;
 import racingcar.view.input.InputReader;
 import racingcar.view.output.OutputWriter;
+import racingcar.view.output.ResultOutputWriter;
 
 public class RacingController {
     public void gameStart() {
         RacingCarFactory racingCarFactory = requestCarNames();
         Integer gameCount = requestCount();
 
-//        System.out.println("출력 끝!");
+        ResultOutputWriter.println(OutputMessage.RESULT.getMessage());
+        for (int i = 0; i < gameCount; i++) {
+            List<Result> results = RacingService.updateCarState(racingCarFactory);
+            ResultOutputWriter.printCarState(results);
+        }
+
+        System.out.println("최종 우승자 : ");
     }
 
     private RacingCarFactory requestCarNames() {
