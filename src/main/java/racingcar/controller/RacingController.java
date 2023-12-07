@@ -1,6 +1,8 @@
 package racingcar.controller;
 
+import camp.nextstep.edu.missionutils.Console;
 import java.util.List;
+import java.util.stream.IntStream;
 import racingcar.config.ErrorMessage;
 import racingcar.config.OutputMessage;
 import racingcar.config.Regex;
@@ -18,13 +20,18 @@ public class RacingController {
         RacingCarFactory racingCarFactory = requestCarNames();
         Integer gameCount = requestCount();
 
-        ResultOutputWriter.println(OutputMessage.RESULT.getMessage());
-        for (int i = 0; i < gameCount; i++) {
-            List<Result> results = RacingService.updateCarState(racingCarFactory);
-            ResultOutputWriter.printCarState(results);
-        }
+        ResultOutputWriter.println("\n" + OutputMessage.RESULT.getMessage());
+//        for (int i = 0; i < gameCount; i++) {
+//            List<Result> results = RacingService.updateCarState(racingCarFactory);
+//            ResultOutputWriter.printCarState(results);
+//        }
+        IntStream.range(0, gameCount)
+                .mapToObj(i -> RacingService.updateCarState(racingCarFactory))
+                .forEach(ResultOutputWriter::printCarState);
 
-        System.out.println("최종 우승자 : ");
+        List<Result> winners = RacingService.getWinners(racingCarFactory);
+        ResultOutputWriter.printWinners(winners);
+        Console.close();
     }
 
     private RacingCarFactory requestCarNames() {

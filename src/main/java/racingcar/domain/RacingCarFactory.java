@@ -3,6 +3,7 @@ package racingcar.domain;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.OptionalInt;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -21,6 +22,19 @@ public class RacingCarFactory {
     public List<Result> updateCar(Supplier<Integer> supplier) {
         return cars.stream()
                 .peek(racingCar -> racingCar.goOrStop(supplier.get()))
+                .map(racingCar -> {
+                    Result result = new Result();
+                    result.setCarName(racingCar.getName());
+                    result.setDistance(racingCar.getDistance());
+                    return result;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<Result> getWinners() {
+        int maxDistance = cars.stream().mapToInt(RacingCar::getDistance).max().getAsInt();
+        return cars.stream()
+                .filter(cars -> cars.getDistance() == maxDistance)
                 .map(racingCar -> {
                     Result result = new Result();
                     result.setCarName(racingCar.getName());

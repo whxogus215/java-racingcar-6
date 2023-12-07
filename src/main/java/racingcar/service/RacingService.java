@@ -9,4 +9,8 @@ public class RacingService {
     public static List<Result> updateCarState(RacingCarFactory racingCarFactory) {
         return racingCarFactory.updateCar(() -> Randoms.pickNumberInRange(0, 9));
     }
+
+    public static List<Result> getWinners(RacingCarFactory racingCarFactory) {
+        return racingCarFactory.getWinners();
+    }
 }
